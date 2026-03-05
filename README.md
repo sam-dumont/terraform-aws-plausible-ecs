@@ -34,7 +34,7 @@ provider "aws" {
 
 module "plausible" {
   source  = "sam-dumont/plausible-ecs/aws"
-  version = "~> 1.0"
+  version = "~> 0.1"
 
   plausible_version  = "v2.1.4"
   domain_name        = "plausible.example.com"
