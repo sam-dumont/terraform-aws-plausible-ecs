@@ -1,9 +1,3 @@
-variable "aws_region" {
-  type        = string
-  description = "AWS region to deploy into"
-  default     = "eu-west-1"
-}
-
 variable "plausible_version" {
   type        = string
   description = "Plausible Community Edition version"
@@ -23,11 +17,6 @@ variable "vpc_id" {
 variable "private_subnet_ids" {
   type        = list(string)
   description = "List of private subnet IDs for the ECS tasks"
-}
-
-variable "lb_arn" {
-  type        = string
-  description = "ARN of the existing Application Load Balancer"
 }
 
 variable "lb_listener_arn" {

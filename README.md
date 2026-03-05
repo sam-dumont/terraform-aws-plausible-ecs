@@ -1,6 +1,6 @@
 # terraform-aws-plausible-ecs
 
-Terraform configuration to deploy [Plausible Analytics Community Edition](https://plausible.io/) on AWS ECS.
+Terraform module to deploy [Plausible Analytics Community Edition](https://plausible.io/) on AWS ECS.
 
 Runs Plausible behind an existing ALB using a hybrid capacity strategy: Fargate Spot as default, with an EC2 Auto Scaling Group (ARM-based `t4g.small` spot instances) as fallback. ECS handles capacity provider management automatically.
 
@@ -28,10 +28,14 @@ ACM certificate provisioning and DNS validation are handled via Route53.
 ## Usage
 
 ```hcl
-module "plausible" {
-  source = "github.com/sam-dumont/terraform-aws-plausible-ecs"
+provider "aws" {
+  region = "eu-west-1"
+}
 
-  aws_region         = "eu-west-1"
+module "plausible" {
+  source  = "sam-dumont/plausible-ecs/aws"
+  version = "~> 1.0"
+
   plausible_version  = "v2.1.4"
   domain_name        = "plausible.example.com"
   vpc_id             = "vpc-0123456789abcdef0"
@@ -39,7 +43,6 @@ module "plausible" {
   lb_listener_arn    = aws_lb_listener.https.arn
   lb_dns_name        = aws_lb.main.dns_name
   lb_zone_id         = aws_lb.main.zone_id
-  lb_arn             = aws_lb.main.arn
   route53_zone_id    = aws_route53_zone.main.zone_id
   sg_default_id      = aws_security_group.private.id
   sg_lb_id           = aws_security_group.lb.id
@@ -62,7 +65,7 @@ All of these are passed as input variables, not created by this module.
 | Name | Version |
 |------|---------|
 | terraform | >= 1.3 |
-| aws | >= 5.0 |
+| [aws](https://registry.terraform.io/providers/hashicorp/aws/latest) | >= 5.0 |
 
 ## Providers
 
@@ -89,6 +92,7 @@ All of these are passed as input variables, not created by this module.
 | `aws_iam_role_policy_attachment.plausible_default` | resource |
 | `aws_iam_role_policy_attachment.plausible_ssm` | resource |
 | `aws_caller_identity.current` | data source |
+| `aws_region.current` | data source |
 | `aws_ssm_parameter.arm_al2023` | data source |
 | `cloudinit_config.plausible` | data source |
 | `aws_iam_policy_document.ecs_service_role_policy` | data source |
@@ -126,12 +130,10 @@ All of these are passed as input variables, not created by this module.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| `aws_region` | AWS region to deploy into | `string` | `"eu-west-1"` | no |
 | `plausible_version` | Plausible Community Edition version | `string` | `"v2.1.4"` | no |
 | `domain_name` | FQDN for the Plausible instance (e.g. `plausible.example.com`) | `string` | n/a | **yes** |
 | `vpc_id` | VPC ID where the ECS cluster will be deployed | `string` | n/a | **yes** |
 | `private_subnet_ids` | List of private subnet IDs for the ECS tasks | `list(string)` | n/a | **yes** |
-| `lb_arn` | ARN of the existing Application Load Balancer | `string` | n/a | **yes** |
 | `lb_listener_arn` | ARN of the HTTPS listener on the ALB | `string` | n/a | **yes** |
 | `lb_dns_name` | DNS name of the ALB (for Route53 alias) | `string` | n/a | **yes** |
 | `lb_zone_id` | Route53 zone ID of the ALB (for alias record) | `string` | n/a | **yes** |

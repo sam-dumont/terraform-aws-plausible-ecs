@@ -85,8 +85,8 @@ data "cloudinit_config" "plausible" {
     content_type = "text/x-shellscript"
     content      = <<EOT
 #!/bin/bash
-export AWS_DEFAULT_REGION=${var.aws_region}
-export AWS_REGION=${var.aws_region}
+export AWS_DEFAULT_REGION=${data.aws_region.current.name}
+export AWS_REGION=${data.aws_region.current.name}
 
 echo ECS_CLUSTER="plausible" >> /etc/ecs/ecs.config
 echo ECS_ENABLE_CONTAINER_METADATA=true >> /etc/ecs/ecs.config

@@ -1,9 +1,7 @@
-aws_region         = "eu-west-1"
 plausible_version  = "v2.1.4"
 domain_name        = "plausible.example.com"
 vpc_id             = "vpc-0123456789abcdef0"
 private_subnet_ids = ["subnet-0123456789abcdef0", "subnet-0123456789abcdef1"]
-lb_arn             = "arn:aws:elasticloadbalancing:eu-west-1:123456789012:loadbalancer/app/my-alb/1234567890abcdef"
 lb_listener_arn    = "arn:aws:elasticloadbalancing:eu-west-1:123456789012:listener/app/my-alb/1234567890abcdef/1234567890abcdef"
 lb_dns_name        = "my-alb-123456789.eu-west-1.elb.amazonaws.com"
 lb_zone_id         = "Z32O12XQLNTSW2"
